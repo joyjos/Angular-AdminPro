@@ -4,6 +4,9 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
 
+//Modelos
+import { Usuario } from '../models/usuario.model';
+
 //Interfaces
 import { RegisterForm } from '../interfaces/register-form.interface';
 import { LoginForm } from '../interfaces/login-form.interface';
@@ -18,20 +21,32 @@ const base_url=environment.base_url;
 })
 export class UsuarioService {
 
+  public usuario!:Usuario;
+
   constructor(private http:HttpClient, private router:Router) { }
+
+  get token():string{
+    return localStorage.getItem('token') || '';
+  }
+
+  get uid():string{
+    return this.usuario.uid || '';
+  }
 
   //===============================
   //Método para validar el token
   //===============================
   validarToken():Observable<boolean> {
-    const token=localStorage.getItem('token') || '';
 
     return this.http.get(base_url+'/login/renew', {
       headers:{
-        'x-token':token
+        'x-token':this.token
       }
     }).pipe(
       tap((resp:any)=>{
+        console.log(resp);
+        const{ nombre, email, password="", img, role, google, uid} = resp.usuario;
+        this.usuario = new Usuario( nombre, email, password, img, role, google, uid );
         localStorage.setItem('token', resp.token);
       }),
       map(resp=>true),
@@ -47,6 +62,23 @@ export class UsuarioService {
       .pipe(tap((resp:any)=>{
         localStorage.setItem('token', resp.token);
       }));
+  }
+
+  //====================================
+  //Método para actualizar un usuario
+  //====================================
+  actualizarUsuario(formData:{nombre:string, email:string, role:any}){
+
+    formData = {
+      ...formData,
+      role: this.usuario.role
+    };
+
+    return this.http.put(base_url+'/usuarios/'+this.uid, formData, {
+      headers:{
+        'x-token':this.token
+      }
+    });
   }
 
   //=======================

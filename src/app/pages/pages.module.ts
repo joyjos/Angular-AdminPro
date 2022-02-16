@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 
 //Módulos
 import { SharedModule } from '../shared/shared.module';
@@ -9,6 +10,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProgressComponent } from './progress/progress.component';
 import { Grafica1Component } from './grafica1/grafica1.component';
 import { PagesComponent } from './pages.component';
+import { PerfilComponent } from './perfil/perfil.component';
 
 
 @NgModule({
@@ -16,7 +18,8 @@ import { PagesComponent } from './pages.component';
     DashboardComponent,
     ProgressComponent,
     Grafica1Component,
-    PagesComponent
+    PagesComponent,
+    PerfilComponent
   ],
   exports: [
     DashboardComponent,
@@ -27,7 +30,8 @@ import { PagesComponent } from './pages.component';
   imports: [
     CommonModule,
     SharedModule,
-    RouterModule
+    RouterModule,
+    ReactiveFormsModule
   ]
 })
 export class PagesModule { }
