@@ -33,16 +33,21 @@ export class UsuarioService {
     return this.usuario.uid || '';
   }
 
+  get headers(){
+    return {
+      headers:{
+        'x-token':this.token
+      }
+    }
+  }
+
   //===============================
   //Método para validar el token
   //===============================
   validarToken():Observable<boolean> {
 
-    return this.http.get(base_url+'/login/renew', {
-      headers:{
-        'x-token':this.token
-      }
-    }).pipe(
+    return this.http.get(base_url+'/login/renew', this.headers)
+    .pipe(
       tap((resp:any)=>{
         console.log(resp);
         const{ nombre, email, password="", img, role, google, uid} = resp.usuario;
@@ -74,11 +79,7 @@ export class UsuarioService {
       role: this.usuario.role
     };
 
-    return this.http.put(base_url+'/usuarios/'+this.uid, formData, {
-      headers:{
-        'x-token':this.token
-      }
-    });
+    return this.http.put(base_url+'/usuarios/'+this.uid, formData, this.headers);
   }
 
   //=======================
@@ -102,4 +103,39 @@ export class UsuarioService {
     //Redirecciono al login
     this.router.navigateByUrl('/login');
   }
+
+  //==================================
+  //Método para cargar los usuarios
+  //==================================
+  cargarUsuarios(desde:number=0){
+    return this.http.get(base_url+'/usuarios?desde='+desde, this.headers)
+      .pipe(
+        map((resp:any)=>{
+          const usuarios=resp.usuarios.map(
+            (user:any) => new Usuario(user.nombre, user.email, '', user.img, user.role, user.google, user.uid)
+          );
+
+          return {
+            total: resp.total,
+            usuarios
+          };
+        })
+      );
+  }
+
+  //==================================
+  //Método para eliminar un usuario
+  //==================================
+  eliminarUsuario(usuario:Usuario){
+    return this.http.delete(base_url+'/usuarios/'+usuario.uid, this.headers);
+  }
+
+  //===============================================
+  //Método para actualizar el role de un usuario
+  //===============================================
+  actualizarRole(usuario:Usuario){
+
+    return this.http.put(base_url+'/usuarios/'+this.uid, usuario, this.headers);
+  }
+
 }
