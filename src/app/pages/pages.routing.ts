@@ -7,6 +7,9 @@ import { ProgressComponent } from './progress/progress.component';
 import { Grafica1Component } from './grafica1/grafica1.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { UsuariosComponent } from './mantenimientos/usuarios/usuarios.component';
+import { HospitalesComponent } from './mantenimientos/hospitales/hospitales.component';
+import { MedicosComponent } from './mantenimientos/medicos/medicos.component';
+import { MedicoComponent } from './mantenimientos/medicos/medico.component';
 
 //Guards
 import { AuthGuard } from '../guards/auth.guard';
@@ -22,7 +25,10 @@ const routes: Routes = [
         { path:'perfil', component:PerfilComponent, data:{titulo:'Perfil'} },
 
         //Mantenimientos
-        { path:'usuarios', component:UsuariosComponent, data:{titulo:'Usuarios'} }
+        { path:'usuarios', component:UsuariosComponent, data:{titulo:'Usuarios'} },
+        { path:'hospitales', component:HospitalesComponent, data:{titulo:'Hospitales'} },
+        { path:'medicos', component:MedicosComponent, data:{titulo:'Médicos'} },
+        { path:'medico/:id', component:MedicoComponent, data:{titulo:'Médicos'} }
       ]
     }
 ];
