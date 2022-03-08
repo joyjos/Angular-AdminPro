@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 //Modelos
 import { Usuario } from '../../models/usuario.model';
@@ -16,7 +17,7 @@ export class HeaderComponent implements OnInit {
 
   public usuario:Usuario;
 
-  constructor(private usuarioService:UsuarioService) {
+  constructor(private usuarioService:UsuarioService, private router:Router) {
     this.usuario = usuarioService.usuario;
     console.log(this.usuario);
    }
@@ -29,6 +30,14 @@ export class HeaderComponent implements OnInit {
   //========================
   logout(){
     this.usuarioService.logout();
+  }
+
+  //=================================
+  //Método para la búsqueda global
+  //=================================
+  buscar(termino:string){
+    console.log(termino);
+    this.router.navigateByUrl('/dashboard/buscar/'+termino);
   }
 
 }
